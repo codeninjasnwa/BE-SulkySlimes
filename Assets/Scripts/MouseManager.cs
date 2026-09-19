@@ -1,26 +1,27 @@
 using UnityEngine;
+using System.Collections;
 
 public class MouseManager : MonoBehaviour
 {
     [Header("Mouse Info")]
     public Vector3 clickStartLocation;
 
+
     [Header("Physics")]
     public Vector3 launchVector;
     public float launchForce;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
+    [Header("Slime")]
+    public Transform slimeTransform;
+    public Rigidbody slimeRigidbody;
+    public Vector3 originalSlimePosition;
     // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             clickStartLocation = Input.mousePosition;
+            originalSlimePosition = slimeTransform.position;
         }
         if (Input.GetMouseButton(0))
         {
@@ -30,11 +31,13 @@ public class MouseManager : MonoBehaviour
                 mouseDifference.y * 1.2f,
                 mouseDifference.y * 1.5f
             );
-            launchVector.Normalize();
+            //slimeTransform.position = originalSlimePosition - launchVector / 400;
+            //launchVector.Normalize();
         }
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("c");
+            slimeRigidbody.isKinematic = false;
+            slimeRigidbody.AddForce(launchForce * (launchVector / 500));
         }
     }
 }
